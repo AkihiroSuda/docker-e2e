@@ -79,8 +79,12 @@ func TestNetworkExternalLb(t *testing.T) {
 	if e := os.Getenv("DOCKER_E2E_ENDPOINT"); e != "" {
 		endpoint = e
 	} else {
+		if os.Getenv("DOCKER_HOST") != "" {
+			t.Log("warning: DOCKER_HOST is set but DOCKER_E2E_ENDPOINT is not set")
+		}
 		endpoint = "127.0.0.1"
 	}
+	t.Logf("Using %s as the endpoint. Note that the port 8080 needs to be accessible from this host.", endpoint)
 
 	// first we need a function to poll containers, and let it run
 	go func() {
